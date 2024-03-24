@@ -6,6 +6,7 @@ const room = require('./Routes/room')
 const authenticate = require('./Middlewares/authenticate');
 const authorize = require('./Middlewares/authorize');
 const validateRoom = require('./validation/room');
+const validate = require('./Middlewares/validate');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -15,11 +16,11 @@ app.get('/get', (req, res) => {
 });
 app.post('/api/v1/room-types', roomTypes.createRoomType);
 app.get('/api/v1/room-types', roomTypes.getRoomTypes);
-app.post('/api/v1/rooms', room.createRoom);
+app.post('/api/v1/rooms',  authenticate, authorize(['admin']), validate(validateRoom), room.createRoom);
 app.get('/api/v1/rooms', room.getAllRooms);
 app.get('/api/v1/rooms/:roomId', room.getRoomById);
-app.patch('/api/v1/rooms/:roomId', room.updateRoom);
-app.delete('/api/v1/rooms/:roomId', room.deleteRoom);
+app.patch('/api/v1/rooms/:roomId', authenticate, authorize(['admin']), validate(validateRoom), room.updateRoom);
+app.delete('/api/v1/rooms/:roomId', authenticate, authorize(['admin']), validate(validateRoom), room.deleteRoom);
 
 
 app.listen(port, () => {
