@@ -3,6 +3,9 @@ const app = express();
 const port = 3000;
 const roomTypes = require('./Routes/roomType')
 const room = require('./Routes/room')
+const authenticate = require('./Middlewares/authenticate');
+const authorize = require('./Middlewares/authorize');
+const validateRoom = require('./validation/room');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
